@@ -1,0 +1,4 @@
+#+TITLE: Matros' Dotfiles
+
+* What's in here?
+Currently there's only my Doom Emacs dotfiles for Windows ¯\_(ツ)_/¯
