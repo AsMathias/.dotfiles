@@ -1,0 +1,199 @@
+#+TITLE: Config
+#+DESCRIPTION: My Windows Doom Emacs config
+#+AUTHOR: Matros Oskal
+
+* Me
+#+begin_src emacs-lisp :tangle yes
+(setq user-full-name "Matros Oskal"
+      user-mail-address "matros.penalize243@passfwd.com")
+#+end_src
+
+* Doom
+** Doom Dashboard
+Setting either custom splash image or custom ASCII art in the Doom Dashboard
+#+begin_src emacs-lisp :tangle yes
+;;(setq fancy-splash-image "~/Pictures/a.png")
+(remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-footer)
+(defun my-weebery-is-always-greater ()
+  (let* ((banner '("⢡⠀⠰⣶⣤⣦⣤⣔⣠⣄⣄⣐⣀⡀⠄⠀⠂⠄⡐⢠⢢⠀⣀⠲⡰⡄⠦⠔⠢⣥⠛⠲⢢⡆⣙⠲⠥⡍⠧⡍⠚⣠⡑⣈⣦⠗⣃⣩⡚⠸⡷⢺⢉⠶⡱⠰⡛⡬⠜⠮⠏⣝⣋⣍"
+                   "⠄⠁⢸⣿⣿⡍⣽⢟⣿⣿⣿⣿⣿⠿⣿⣿⣿⣷⣶⣶⣶⣶⣶⣧⣤⣬⣥⣀⣀⣈⣐⣙⣲⢤⠩⠝⠒⣉⠱⢤⣗⢃⠰⢇⡒⠌⠄⠡⡑⣞⠔⡩⡍⠶⣒⣣⢰⠐⣜⠸⢽⣃⢭⢏"
+                   "⡀⢁⠂⢸⣯⠟⢜⣵⣿⣿⣿⠻⢿⣿⡷⢸⣿⣿⢣⣿⣿⣿⣿⣿⣿⡹⣿⡏⠻⠹⡛⣿⣿⣿⣿⡿⠿⣿⣿⣶⣶⣶⣶⣾⣶⣥⣬⣭⣤⣤⣙⣊⣲⡝⣐⣛⡈⠊⢓⡄⢆⡣⣌⣬⡵"
+                   "⢤⠈⠇⣿⢻⣴⡸⡀⠀⡀⠀⠀⠀⠀⠉⠁⢿⣿⠸⣛⡿⢿⣿⣿⣿⣇⣿⣇⣷⡇⢃⢿⣿⣿⣿⡇⡇⢹⣿⣿⣿⣿⣿⡿⣸⡿⣻⣯⢻⣿⣿⢛⣿⣿⣿⣿⣿⣿⣿⣿⣷⣶⣶⣿⣷"
+                   "⢈⡉⢤⣿⣾⣿⡇⣇⠀⢹⣿⣷⣤⣤⡀⠀⠘⡇⠀⠀⠙⢷⣎⡿⣿⣿⡘⡧⣿⣿⣦⢸⣿⣿⣿⡇⣿⡌⢿⣿⣿⣿⣿⣧⣿⢹⣿⣿⡎⣿⣿⢸⡸⣿⣿⣿⣿⣿⡘⣿⣿⢸⣿⣿⣿"
+                   "⠨⢌⢸⣇⣿⣿⡇⣿⣆⠈⣿⣿⣿⣿⡿⠇⢠⠀⢀⠀⠀⠀⠨⣵⣾⣿⣧⠃⣿⣿⣿⣎⢿⣿⣿⣿⢹⣏⡘⣿⣿⣿⡿⢸⣿⣾⣽⣿⣗⢻⣿⢸⣥⢿⣿⣿⣿⣿⢀⣿⢃⣿⣿⣿⣧"
+                   "⡐⢈⢸⣿⣿⣿⣷⢹⣿⡧⠙⣿⣿⣿⣷⡀⣜⡄⠘⠃⡠⠂⠀⠘⣿⣿⣿⣧⢹⣿⣿⣿⡜⡙⢿⣿⡎⣿⡖⢸⣿⣿⡇⣧⣽⣯⣭⣿⣿⡆⣿⡏⣿⣎⣿⣿⣿⣿⢨⠘⣼⣿⣿⣿⡷"
+                   "⢈⡥⣾⣿⣿⣿⣿⣇⢻⣶⣶⣴⣛⣿⣿⣷⣙⠷⣭⣽⣾⠆⣰⣷⣽⣿⣿⣿⣿⣿⣿⣿⣿⡜⢨⡻⣿⢸⣿⣆⢹⣿⢹⡿⠿⠿⠛⠛⠋⠘⠘⡇⢿⣿⡜⣿⣿⣿⠰⢱⣿⣿⣿⣿⠃"
+                   "⢋⠀⣿⢹⣿⣿⣿⡟⣎⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣄⠻⣮⡃⢻⣿⠅⠙⠀⢀⣀⣀⣀⠀⠀⠀⠀⠙⠀⠀⠈⠘⣿⣿⢀⣿⣿⣿⣿⣿⢏"
+                   "⣄⢻⣿⡇⠙⣿⣿⣧⢢⡀⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢿⣿⣿⣿⣷⣿⣿⣯⣶⣾⣿⣿⣿⣿⣿⣿⣄⠠⢸⠀⠀⣠⠀⠠⠀⣈⢧⣾⣿⣿⣿⣿⣟⠆"
+                   "⠲⣸⣇⡇⠀⠎⠻⣿⣧⠻⣶⣌⣻⣿⣿⣿⣿⣿⣿⣿⣿⣽⣿⡿⣿⣻⣿⣿⣿⣿⣿⣿⣿⣽⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣄⢤⣬⣄⡈⠁⡠⠃⠀⢁⣾⣿⣿⣿⣿⣿⡿⠢"
+                   "⡻⢿⣿⣥⣬⣿⠥⠬⣻⣷⣻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣮⣟⣿⣿⣿⣯⣟⡿⣿⣿⣟⣯⣿⣿⣾⣝⣿⣿⣿⣿⣿⣿⣿⣿⣦⣉⣟⣚⡙⠛⠛⠛⡛⣤⢏⣾⣿⣿⣿⣿⣿⣿⡟⠥"
+                   "⣭⣀⡀⠈⣉⠉⡉⠙⠛⠛⠒⠛⠟⠛⠿⠿⠿⠿⢿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⢷⣾⣽⣻⣿⣽⣿⡿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡿⠷⡾⡿⣣⣿⣿⢿⣿⣿⣿⣿⣿⣟⡘"
+                   "⣚⠓⣦⠼⢢⠅⠮⡡⣞⡤⡘⢆⡐⢠⠐⢄⡀⢠⢀⢠⠀⠀⠀⢈⡠⡉⠉⠉⠉⠙⠛⠒⠚⠛⠟⠛⠾⠭⠽⠿⣿⣿⣿⣿⣿⣿⣿⠿⠫⣗⣩⣣⣞⣵⣿⣟⣳⣿⣿⣿⣿⢿⣼⢠⢃"
+                   "⢇⡽⢊⢮⢳⠝⠲⢣⠖⠶⠮⡘⠴⣠⣉⡐⢦⡄⣋⠈⠋⣒⡬⢐⠸⢡⣲⡉⢖⠀⠘⣄⢊⡰⢄⢠⠀⢤⠐⡠⢀⡀⠀⢈⡁⠉⠉⡉⠉⡉⠓⠒⠛⠛⠿⠻⠿⠿⠿⠿⣷⣛⣿⠅⢺"
+                   "⣱⠪⡽⢾⡫⢅⣏⠳⠌⡹⠩⡹⠄⢔⡈⢷⣃⠸⣮⠴⠾⠠⣉⠖⢣⣢⡁⠏⠡⡈⢅⡰⠉⡱⢁⠂⠩⢞⠈⡙⢂⠒⠡⠉⡙⣉⡄⠑⡌⣌⠁⡃⡀⢄⠠⡡⢤⢐⠠⢠⡀⣐⣤⠊⡰"))
+         (longest-line (apply #'max (mapcar #'length banner))))
+    (put-text-property
+     (point)
+     (dolist (line banner (point))
+       (insert (+doom-dashboard--center
+                +doom-dashboard--width
+                (concat line (make-string (max 0 (- longest-line (length line))) 32)))
+               "\n"))
+     'face 'doom-dashboard-banner)))
+(setq +doom-dashboard-ascii-banner-fn #'my-weebery-is-always-greater)
+#+end_src
+
+* Frame config
+Custom frame size and position that fits my laptop
+#+begin_src emacs-lisp :tangle yes
+(setq initial-frame-alist '((top . 7) (left . 0) (height . 37) (width . 100)))
+#+end_src
+
+* Fonts
+Settings related to fonts within Doom Emacs:
+- '*doom-font*' -- Standard monospace font that is used for most things in Emacs.
+- '*doom-variable-pitch-font*' -- Variable font which is useful in some Emacs plugins.
+- '*doom-big-font*' -- Used in /doom-big-font-mode/; Useful for presentations.
+- '*font-lock-comment-face*' -- For comments.
+  '*font-lock-keyword-face*' -- For keywords with special significance, 'for' and 'if' in C
+#+begin_src emacs-lisp :tangle yes
+(setq doom-font (font-spec :family "JetBrainsMono NFM Medium" :size 20 :weigth 'semi-bold)
+    doom-variable-pitch-font (font-spec :family "JetBrainsMono NFM Medium" :size 22)
+    doom-big-font (font-spec :family "JetBrainsMono NFM Medium" :size 26))
+(after! doom-themes
+  (setq doom-themes-enable-bold t
+      doom-themes-enable-italic t))
+(custom-set-faces!
+  '(font-lock-comment-face :weight bold)
+  '(font-lock-keyword-face :weight bold))
+#+end_src
+
+* Lsp
+#+begin_src emacs-lisp :tangle yes
+(after! lsp-mode
+  ;; First, explicitly disable digestif by setting its command to nil
+  (setq lsp-latex-server-command nil)
+
+  ;; Tell LSP to forget about digestif entirely
+  (setq lsp-disabled-clients '(digestif))
+
+  ;; Now set up texlab as the LaTeX language server
+  (setq lsp-tex-server 'texlab)
+  (setq lsp-latex-server 'texlab)
+
+  ;; Configure texlab with full settings
+  (setq lsp-texlab-server-command "texlab")
+  (setq lsp-texlab-build-executable "latexmk")
+  (setq lsp-texlab-build-args '("-pdf" "-interaction=nonstopmode" "-synctex=1")))
+#+end_src
+
+* Text formatting
+#+begin_src emacs-lisp :tangle yes
+(after! org
+  (setq-default fill-column 90)
+  (add-hook 'org-mode-hook #'auto-fill-mode))
+#+end_src
+
+* Pdf-tools
+#+begin_src emacs-lisp :tangle yes
+(use-package pdf-view
+  :hook (pdf-tools-enabled . pdf-view-midnight-minor-mode)
+  :hook (pdf-tools-enabled . hide-mode-line-mode)
+  :config
+  (setq pdf-view-midnight-colors '("#530000" . "#e2cdaf")))
+#+end_src
+
+* Latex
+#+begin_src emacs-lisp :tangle yes
+;;(setq reftex-default-bibliography "~/Documents/Latex/")
+(use-package lsp-ltex
+  :hook (LaTeX-mode . lsp)         ;; Enable LSP in AUCTeX's LaTeX-mode
+  :custom
+  (lsp-ltex-language "en-US"))
+
+(after! tex-mode
+  (add-to-list 'major-mode-remap-alist '(latex-mode . LaTeX-mode)))
+
+(map! :after latex
+      :map LaTeX-mode-map
+      :localleader
+      "l" #'latex-preview-pane-mode)
+
+;; This prevents the built-in latex-mode from being loaded
+(setq auto-mode-alist (rassq-delete-all 'latex-mode auto-mode-alist))
+
+;; This ensures AUCTeX's LaTeX-mode is used for .tex files
+;; For extra certainty, we can also handle related file extensions
+(dolist (pattern '("\\.tex\\'" "\\.ltx\\'" "\\.dtx\\'" "\\.ins\\'"))
+  (add-to-list 'auto-mode-alist `(,pattern . LaTeX-mode)))
+#+end_src
+
+* Org-mode
+Note that the config is wrapped in *(after! org)* to ensure it isn't being evaluated too early.
+#+begin_src emacs-lisp :tangle yes
+(after! org
+  (setq org-directory "~/org/"
+        org-hide-emphasis-markers t)
+  (setq org-clock-sound "~/Music/uwu.wav"))
+#+end_src
+
+** Org-agenda
+#+begin_src emacs-lisp :tangle yes
+(after! org
+  (setq org-agenda-files '("~/org/agenda.org")))
+#+end_src
+
+** Org-roam
+#+begin_src emacs-lisp :tangle yes
+(after! org
+  (require 'org-roam-protocol)
+  (setq org-roam-directory "~/org/roam/"
+        org-roam-graph-viewer "c:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe"
+        org-roam-graph-executable "c:/Program Files/Graphviz/bin/dot.exe"))
+#+end_src
+
+** Org-download
+#+begin_src emacs-lisp :tangle yes
+(after! org
+  (require 'org-download)
+  (add-hook 'dired-mode-hook 'org-download-enable)
+  (setq-default org-download-method 'directory
+                org-download-image-dir "~/Pictures/"
+                org-download-heading-lvl nil))
+#+end_src
+
+** Projectile
+#+begin_src emacs-lisp :tangle yes
+(use-package projectile
+  :config
+  (projectile-mode 1))
+(projectile-add-known-project "c:/src/tetris")
+(projectile-add-known-project "c:/src/flutter/loktet/lib/main.dart")
+#+end_src
+
+* Flutter and Dart
+#+begin_src emacs-lisp :tangle yes
+(setq lsp-dart-sdk-dir "~/dev/flutter/bin/cache/dart-sdk")
+(setq lsp-dart-flutter-sdk-dir "~/dev/flutter")
+#+end_src
+
+* Multiple-cursors
+#+begin_src emacs-lisp :tangle yes
+(map! "Ø" #'evil-multiedit-toggle-or-restrict-region)
+#+end_src
+
+* Language
+#+begin_src emacs-lisp :tangle yes
+(setenv "LANG" "en_US")
+(setenv "DICPATH" "C:/Dictionaries/")
+#+end_src
+
+* Spell +flyspell +hunspell
+#+begin_src emacs-lisp :tangle yes
+(setq ispell-program-name "hunspell")
+(setq ispell-hunspell-dict-paths-alist
+      '(("en_US" "C:/Dictionaries/en_US.aff")))
+(setq ispell-local-dictionary "en_US")
+(setq ispell-local-dictionary-alist
+      '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8)))
+#+end_src

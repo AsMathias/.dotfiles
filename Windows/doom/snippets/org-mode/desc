@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: desc
+# key: <desc
+# --
+
+#+AUTHOR:    ${1:`user-full-name`}
+#+EMAIL:     ${2:`user-mail-address`}
