@@ -31,11 +31,11 @@
      'face 'doom-dashboard-banner)))
 (setq +doom-dashboard-ascii-banner-fn #'my-weebery-is-always-greater)
 
-(setq initial-frame-alist '((top . 7) (left . 0) (height . 37) (width . 100)))
+(setq default-frame-alist '((top . 7) (left . 0) (height . 47) (width . 100)))
 
-(setq doom-font (font-spec :family "JetBrainsMono NFM Medium" :size 20 :weigth 'semi-bold)
-    doom-variable-pitch-font (font-spec :family "JetBrainsMono NFM Medium" :size 22)
-    doom-big-font (font-spec :family "JetBrainsMono NFM Medium" :size 26))
+(setq doom-font (font-spec :family "JetBrainsMono NFM Light" :size 16 :weigth 'semi-bold)
+    doom-variable-pitch-font (font-spec :family "JetBrainsMono NFM Light" :size 18)
+    doom-big-font (font-spec :family "JetBrainsMono NFM Light" :size 20))
 (after! doom-themes
   (setq doom-themes-enable-bold t
       doom-themes-enable-italic t))
@@ -58,6 +58,10 @@
   (setq lsp-texlab-server-command "texlab")
   (setq lsp-texlab-build-executable "latexmk")
   (setq lsp-texlab-build-args '("-pdf" "-interaction=nonstopmode" "-synctex=1")))
+
+(use-package! treemacs
+  :config
+  (setq treemacs-position 'right))
 
 (after! org
   (setq-default fill-column 90)
@@ -103,7 +107,8 @@
   (require 'org-roam-protocol)
   (setq org-roam-directory "~/org/roam/"
         org-roam-graph-viewer "c:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe"
-        org-roam-graph-executable "c:/Program Files/Graphviz/bin/dot.exe"))
+        ;;org-roam-graph-executable "c:/Program Files/Graphviz/bin/dot.exe"))
+        org-roam-graph-executable "c:/msys64/mingw64/bin/dot.exe"))
 
 (after! org
   (require 'org-download)
@@ -115,11 +120,6 @@
 (use-package projectile
   :config
   (projectile-mode 1))
-(projectile-add-known-project "c:/src/tetris")
-(projectile-add-known-project "c:/src/flutter/loktet/lib/main.dart")
-
-(setq lsp-dart-sdk-dir "~/dev/flutter/bin/cache/dart-sdk")
-(setq lsp-dart-flutter-sdk-dir "~/dev/flutter")
 
 (map! "Ø" #'evil-multiedit-toggle-or-restrict-region)
 

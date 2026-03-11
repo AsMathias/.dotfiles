@@ -46,7 +46,7 @@ Setting either custom splash image or custom ASCII art in the Doom Dashboard
 * Frame config
 Custom frame size and position that fits my laptop
 #+begin_src emacs-lisp :tangle yes
-(setq initial-frame-alist '((top . 7) (left . 0) (height . 37) (width . 100)))
+(setq default-frame-alist '((top . 7) (left . 0) (height . 47) (width . 100)))
 #+end_src
 
 * Fonts
@@ -57,9 +57,9 @@ Settings related to fonts within Doom Emacs:
 - '*font-lock-comment-face*' -- For comments.
   '*font-lock-keyword-face*' -- For keywords with special significance, 'for' and 'if' in C
 #+begin_src emacs-lisp :tangle yes
-(setq doom-font (font-spec :family "JetBrainsMono NFM Medium" :size 20 :weigth 'semi-bold)
-    doom-variable-pitch-font (font-spec :family "JetBrainsMono NFM Medium" :size 22)
-    doom-big-font (font-spec :family "JetBrainsMono NFM Medium" :size 26))
+(setq doom-font (font-spec :family "JetBrainsMono NFM Light" :size 16 :weigth 'semi-bold)
+    doom-variable-pitch-font (font-spec :family "JetBrainsMono NFM Light" :size 18)
+    doom-big-font (font-spec :family "JetBrainsMono NFM Light" :size 20))
 (after! doom-themes
   (setq doom-themes-enable-bold t
       doom-themes-enable-italic t))
@@ -85,6 +85,13 @@ Settings related to fonts within Doom Emacs:
   (setq lsp-texlab-server-command "texlab")
   (setq lsp-texlab-build-executable "latexmk")
   (setq lsp-texlab-build-args '("-pdf" "-interaction=nonstopmode" "-synctex=1")))
+#+end_src
+
+* Treemacs
+#+begin_src emacs-lisp :tangle yes
+(use-package! treemacs
+  :config
+  (setq treemacs-position 'right))
 #+end_src
 
 * Text formatting
@@ -149,7 +156,8 @@ Note that the config is wrapped in *(after! org)* to ensure it isn't being evalu
   (require 'org-roam-protocol)
   (setq org-roam-directory "~/org/roam/"
         org-roam-graph-viewer "c:/Program Files/BraveSoftware/Brave-Browser/Application/brave.exe"
-        org-roam-graph-executable "c:/Program Files/Graphviz/bin/dot.exe"))
+        ;;org-roam-graph-executable "c:/Program Files/Graphviz/bin/dot.exe"))
+        org-roam-graph-executable "c:/msys64/mingw64/bin/dot.exe"))
 #+end_src
 
 ** Org-download
@@ -167,14 +175,6 @@ Note that the config is wrapped in *(after! org)* to ensure it isn't being evalu
 (use-package projectile
   :config
   (projectile-mode 1))
-(projectile-add-known-project "c:/src/tetris")
-(projectile-add-known-project "c:/src/flutter/loktet/lib/main.dart")
-#+end_src
-
-* Flutter and Dart
-#+begin_src emacs-lisp :tangle yes
-(setq lsp-dart-sdk-dir "~/dev/flutter/bin/cache/dart-sdk")
-(setq lsp-dart-flutter-sdk-dir "~/dev/flutter")
 #+end_src
 
 * Multiple-cursors
