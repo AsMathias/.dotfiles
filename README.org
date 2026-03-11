@@ -22,8 +22,17 @@ In my case they're stored in a directory called "Dictionaries" placed in my root
 
 If you've installed emacs with MSYS2, you should either clone and install Doom inside the
 ~C:/Users/USER/AppData/Roaming/~ directory, or run *cmd* as admin and execute the following
-commands.
+commands:
 - ~mklink /j "C:\Users\USER\AppData\Roaming\.emacs.d" "C:\Users\USER\.emacs.d"~
 - ~mklink /j "C:\Users\USER\AppData\Roaming\.doom.d" "C:\Users\USER\.doom.d"~
 - ~mklink /j "C:\Users\USER\AppData\Roaming\org" "C:\Users\USER\org"~
 I recommend the first option, much less work and headache if you're cognizant about it.
+Also remember to replace ~USER~ appropriately.
+
+You should also set HOME and APPDATA enviroment variables. You can check if they're set
+with:
+- ~echo $env:HOME~
+- ~echo $env:APPDATA~
+These variables should be something like:
+- ~HOME = C:\Users\USER~
+- ~APPDATA = C:\Users\USER\AppData\Roaming~
