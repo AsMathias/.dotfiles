@@ -87,10 +87,10 @@
       :localleader
       "l" #'latex-preview-pane-mode)
 
-;; This prevents the built-in latex-mode from being loaded
+;; This prevents the built-in latex-mode from loading
 (setq auto-mode-alist (rassq-delete-all 'latex-mode auto-mode-alist))
 
-;; This ensures AUCTeX's LaTeX-mode is used for .tex files
+;; This ensures AUCTeX's LaTeX-mode is running for .tex files
 ;; For extra certainty, we can also handle related file extensions
 (dolist (pattern '("\\.tex\\'" "\\.ltx\\'" "\\.dtx\\'" "\\.ins\\'"))
   (add-to-list 'auto-mode-alist `(,pattern . LaTeX-mode)))
@@ -98,7 +98,7 @@
 (after! org
   (setq org-directory "~/org/"
         org-hide-emphasis-markers t)
-  (setq org-clock-sound "~/Music/uwu.wav"))
+  (setq org-clock-sound "~/Music/orgclock.wav"))
 
 (after! org
   (setq org-agenda-files '("~/org/agenda.org")))
@@ -117,10 +117,6 @@
                 org-download-image-dir "~/Pictures/"
                 org-download-heading-lvl nil))
 
-(use-package projectile
-  :config
-  (projectile-mode 1))
-
 (map! "Ø" #'evil-multiedit-toggle-or-restrict-region)
 
 (setenv "LANG" "en_US")
@@ -132,3 +128,7 @@
 (setq ispell-local-dictionary "en_US")
 (setq ispell-local-dictionary-alist
       '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8)))
+
+(use-package projectile
+  :config
+  (projectile-mode 1))

@@ -2,14 +2,14 @@
 #+DESCRIPTION: My Windows Doom Emacs config
 #+AUTHOR: Matros Oskal
 
-* Me
+** Me
 #+begin_src emacs-lisp :tangle yes
 (setq user-full-name "Matros Oskal"
       user-mail-address "matros.penalize243@passfwd.com")
 #+end_src
 
-* Doom
-** Doom Dashboard
+** Doom
+*** Doom Dashboard
 Setting either custom splash image or custom ASCII art in the Doom Dashboard
 #+begin_src emacs-lisp :tangle yes
 ;;(setq fancy-splash-image "~/Pictures/a.png")
@@ -43,15 +43,15 @@ Setting either custom splash image or custom ASCII art in the Doom Dashboard
 (setq +doom-dashboard-ascii-banner-fn #'my-weebery-is-always-greater)
 #+end_src
 
-* Frame config
+** Frame config
 Custom frame size and position that fits my laptop
 #+begin_src emacs-lisp :tangle yes
 (setq default-frame-alist '((top . 7) (left . 0) (height . 47) (width . 100)))
 #+end_src
 
-* Fonts
+** Fonts
 Settings related to fonts within Doom Emacs:
-- '*doom-font*' -- Standard monospace font that is used for most things in Emacs.
+- '*doom-font*' -- Standard monospace font that's used for most things in Emacs.
 - '*doom-variable-pitch-font*' -- Variable font which is useful in some Emacs plugins.
 - '*doom-big-font*' -- Used in /doom-big-font-mode/; Useful for presentations.
 - '*font-lock-comment-face*' -- For comments.
@@ -68,7 +68,7 @@ Settings related to fonts within Doom Emacs:
   '(font-lock-keyword-face :weight bold))
 #+end_src
 
-* Lsp
+** Lsp
 #+begin_src emacs-lisp :tangle yes
 (after! lsp-mode
   ;; First, explicitly disable digestif by setting its command to nil
@@ -87,21 +87,21 @@ Settings related to fonts within Doom Emacs:
   (setq lsp-texlab-build-args '("-pdf" "-interaction=nonstopmode" "-synctex=1")))
 #+end_src
 
-* Treemacs
+** Treemacs
 #+begin_src emacs-lisp :tangle yes
 (use-package! treemacs
   :config
   (setq treemacs-position 'right))
 #+end_src
 
-* Text formatting
+** Text formatting
 #+begin_src emacs-lisp :tangle yes
 (after! org
   (setq-default fill-column 90)
   (add-hook 'org-mode-hook #'auto-fill-mode))
 #+end_src
 
-* Pdf-tools
+** Pdf-tools
 #+begin_src emacs-lisp :tangle yes
 (use-package pdf-view
   :hook (pdf-tools-enabled . pdf-view-midnight-minor-mode)
@@ -110,7 +110,7 @@ Settings related to fonts within Doom Emacs:
   (setq pdf-view-midnight-colors '("#530000" . "#e2cdaf")))
 #+end_src
 
-* Latex
+** Latex
 #+begin_src emacs-lisp :tangle yes
 ;;(setq reftex-default-bibliography "~/Documents/Latex/")
 (use-package lsp-ltex
@@ -126,31 +126,31 @@ Settings related to fonts within Doom Emacs:
       :localleader
       "l" #'latex-preview-pane-mode)
 
-;; This prevents the built-in latex-mode from being loaded
+;; This prevents the built-in latex-mode from loading
 (setq auto-mode-alist (rassq-delete-all 'latex-mode auto-mode-alist))
 
-;; This ensures AUCTeX's LaTeX-mode is used for .tex files
+;; This ensures AUCTeX's LaTeX-mode is running for .tex files
 ;; For extra certainty, we can also handle related file extensions
 (dolist (pattern '("\\.tex\\'" "\\.ltx\\'" "\\.dtx\\'" "\\.ins\\'"))
   (add-to-list 'auto-mode-alist `(,pattern . LaTeX-mode)))
 #+end_src
 
-* Org-mode
-Note that the config is wrapped in *(after! org)* to ensure it isn't being evaluated too early.
+** Org-mode
+Note that we call *(after! org)* to ensure it isn't evaluated too early.
 #+begin_src emacs-lisp :tangle yes
 (after! org
   (setq org-directory "~/org/"
         org-hide-emphasis-markers t)
-  (setq org-clock-sound "~/Music/uwu.wav"))
+  (setq org-clock-sound "~/Music/orgclock.wav"))
 #+end_src
 
-** Org-agenda
+*** Org-agenda
 #+begin_src emacs-lisp :tangle yes
 (after! org
   (setq org-agenda-files '("~/org/agenda.org")))
 #+end_src
 
-** Org-roam
+*** Org-roam
 #+begin_src emacs-lisp :tangle yes
 (after! org
   (require 'org-roam-protocol)
@@ -160,7 +160,7 @@ Note that the config is wrapped in *(after! org)* to ensure it isn't being evalu
         org-roam-graph-executable "c:/msys64/mingw64/bin/dot.exe"))
 #+end_src
 
-** Org-download
+*** Org-download
 #+begin_src emacs-lisp :tangle yes
 (after! org
   (require 'org-download)
@@ -170,25 +170,18 @@ Note that the config is wrapped in *(after! org)* to ensure it isn't being evalu
                 org-download-heading-lvl nil))
 #+end_src
 
-** Projectile
-#+begin_src emacs-lisp :tangle yes
-(use-package projectile
-  :config
-  (projectile-mode 1))
-#+end_src
-
-* Multiple-cursors
+** Multiple-cursors
 #+begin_src emacs-lisp :tangle yes
 (map! "Ø" #'evil-multiedit-toggle-or-restrict-region)
 #+end_src
 
-* Language
+** Language
 #+begin_src emacs-lisp :tangle yes
 (setenv "LANG" "en_US")
 (setenv "DICPATH" "C:/Dictionaries/")
 #+end_src
 
-* Spell +flyspell +hunspell
+** Spell +flyspell +hunspell
 #+begin_src emacs-lisp :tangle yes
 (setq ispell-program-name "hunspell")
 (setq ispell-hunspell-dict-paths-alist
@@ -197,3 +190,10 @@ Note that the config is wrapped in *(after! org)* to ensure it isn't being evalu
 (setq ispell-local-dictionary-alist
       '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8)))
 #+end_src
+** Projectile
+#+begin_src emacs-lisp :tangle yes
+(use-package projectile
+  :config
+  (projectile-mode 1))
+#+end_src
+
