@@ -1,6 +1,7 @@
 #+TITLE: Config
-#+DESCRIPTION: My Windows Doom Emacs config
 #+AUTHOR: Matros Oskal
+
+My Windows Doom Emacs config
 
 ** Me
 #+begin_src emacs-lisp :tangle yes
@@ -10,7 +11,7 @@
 
 ** Doom
 *** Doom Dashboard
-Setting either custom splash image or custom ASCII art in the Doom Dashboard
+retting either custom splash image or custom ASCII art in the Doom Dashboard
 #+begin_src emacs-lisp :tangle yes
 ;;(setq fancy-splash-image "~/Pictures/a.png")
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-footer)

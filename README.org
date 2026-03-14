@@ -2,9 +2,9 @@
 
 
 
-Currently there's only my Doom Emacs dotfiles for Windows ¯\_(ツ)_/¯
+Currently there's only my Doom Emacs config for Windows 11 ¯\_(ツ)_/¯
 
-** Some requirements
+** Some Windows requirements
 For this config to work you're required have multiple path variables in place. These
 include, but are not limited to:
 - ~DOOMDIR~
