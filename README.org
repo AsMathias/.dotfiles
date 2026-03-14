@@ -5,7 +5,7 @@
 Currently there's only my Doom Emacs config for Windows 11 ¯\_(ツ)_/¯
 
 ** Some Windows requirements
-For this config to work you're required have multiple path variables in place. These
+For this config to work you're required to have multiple path variables in place. These
 include, but are not limited to:
 - ~DOOMDIR~
 - ~DICPATH~
@@ -14,7 +14,7 @@ include, but are not limited to:
 - ~C:\msys64\mingw64\bin~
 - ~C:\ProgramData\chocolatey\lib\hunspell.portable\tools~
 If you use package managers like =msys64= you can often get away with only adding a path to
-its bin like shown above.
+its bin like shown above, given of course you install the required programs with =msys64=
 
 To use =Hunspell= you need to have a dictionary directory with your desired dictionary files.
 In my case they're stored in a directory called "Dictionaries" placed in my root directory.
