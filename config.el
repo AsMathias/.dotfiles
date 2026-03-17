@@ -31,14 +31,18 @@
      'face 'doom-dashboard-banner)))
 (setq +doom-dashboard-ascii-banner-fn #'my-weebery-is-always-greater)
 
+(add-to-list 'exec-path (expand-file-name "~/.emacs.d/bin/doom"))
+(setq shell-file-name "C:/Program Files/PowerShell/7/pwsh.exe")
+(setq explicit-shell-file-name "C:/Program Files/PowerShell/7/pwsh.exe")
+
 (setq default-frame-alist '((top . 7) (left . 0) (height . 47) (width . 100)))
 
 (setq doom-font (font-spec :family "JetBrainsMono NFM Light" :size 16 :weigth 'semi-bold)
-    doom-variable-pitch-font (font-spec :family "JetBrainsMono NFM Light" :size 18)
-    doom-big-font (font-spec :family "JetBrainsMono NFM Light" :size 20))
+      doom-variable-pitch-font (font-spec :family "JetBrainsMono NFM Light" :size 18)
+      doom-big-font (font-spec :family "JetBrainsMono NFM Light" :size 20))
 (after! doom-themes
   (setq doom-themes-enable-bold t
-      doom-themes-enable-italic t))
+        doom-themes-enable-italic t))
 (custom-set-faces!
   '(font-lock-comment-face :weight bold)
   '(font-lock-keyword-face :weight bold))
@@ -61,11 +65,32 @@
 
 (use-package! treemacs
   :config
-  (setq treemacs-position 'right))
+  (setq treemacs-position 'right
+        treemacs-missing-project-action 'remove))
 
-(after! org
-  (setq-default fill-column 90)
-  (add-hook 'org-mode-hook #'auto-fill-mode))
+(setq-default fill-column 90)
+
+;; Linting
+(use-package! rainbow-delimiters
+  :hook (emacs-lisp-mode . rainbow-delimiters-mode))
+(add-hook 'emacs-lisp-mode-hook #'flycheck-mode)
+(setq flycheck-emacs-lisp-load-path 'inherit)
+
+;; Structural editing
+(add-hook 'emacs-lisp-mode-hook #'lispy-mode)
+
+;; QoL
+(add-hook 'emacs-lisp-mode-hook #'eldoc-mode)
+(add-hook 'emacs-lisp-mode-hook #'hl-line-mode)
+
+;; Better eval feedback
+(setq eval-expression-print-length nil
+      eval-expression-print-level nil)
+
+;; Parenthesis feedback
+(after! smartparens
+  (show-smartparens-global-mode 1)
+  (setq sp-show-pair-delay 0))
 
 (use-package pdf-view
   :hook (pdf-tools-enabled . pdf-view-midnight-minor-mode)
@@ -96,12 +121,36 @@
   (add-to-list 'auto-mode-alist `(,pattern . LaTeX-mode)))
 
 (after! org
-  (setq org-directory "~/org/"
-        org-hide-emphasis-markers t)
-  (setq org-clock-sound "~/Music/orgclock.wav"))
+  (setq org-directory (expand-file-name "~/org/")
+        org-clock-sound (expand-file-name "~/Music/orgclock.wav"))
+  
+  (setq org-hide-emphasis-markers t
+        org-src-fontify-natively t
+        org-src-window-setup 'current-window)
+
+  (add-hook! 'org-mode-hook #'rainbow-delimiters-mode))
 
 (after! org
-  (setq org-agenda-files '("~/org/agenda.org")))
+  (setq org-agenda-files '("c:/Users/Job_man/org/agenda/"))
+  
+  (setq org-priority-faces '((?A :foreground "#ff6c6b" :weight bold)
+                             (?B :foreground "#fca503" :weight bold)
+                             (?C :foreground "#fcec03" :weight bold))
+        org-agenda-block-separator 8411)
+  
+  (setq org-agenda-custom-commands
+        '(("v" "A stylized agenda view"
+           ((tags "PRIORITY=\"A\""
+                  ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                   (org-agenda-overriding-header "High-priority tasks:")))
+            (tags "PRIORITY=\"B\""
+                  ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                   (org-agenda-overriding-header "Medium-priority tasks:")))
+            (tags "PRIORITY=\"C\""
+                  ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                   (org-agenda-overriding-header "Low-priority tasks:")))
+            (agenda "")
+            (alltodo ""))))))
 
 (after! org
   (require 'org-roam-protocol)
@@ -129,6 +178,6 @@
 (setq ispell-local-dictionary-alist
       '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8)))
 
-(use-package projectile
+(use-package! projectile
   :config
   (projectile-mode 1))

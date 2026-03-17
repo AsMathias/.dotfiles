@@ -1,5 +1,6 @@
 #+TITLE: Config
 #+AUTHOR: Matros Oskal
+#+OPTIONS: toc:3
 
 My Windows Doom Emacs config
 
@@ -11,7 +12,7 @@ My Windows Doom Emacs config
 
 ** Doom
 *** Doom Dashboard
-retting either custom splash image or custom ASCII art in the Doom Dashboard
+Setting either custom splash image or custom ASCII art in the Doom Dashboard
 #+begin_src emacs-lisp :tangle yes
 ;;(setq fancy-splash-image "~/Pictures/a.png")
 (remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-footer)
@@ -44,6 +45,13 @@ retting either custom splash image or custom ASCII art in the Doom Dashboard
 (setq +doom-dashboard-ascii-banner-fn #'my-weebery-is-always-greater)
 #+end_src
 
+** Shell
+#+begin_src emacs-lisp :tangle yes
+(add-to-list 'exec-path (expand-file-name "~/.emacs.d/bin/doom"))
+(setq shell-file-name "C:/Program Files/PowerShell/7/pwsh.exe")
+(setq explicit-shell-file-name "C:/Program Files/PowerShell/7/pwsh.exe")
+#+end_src
+
 ** Frame config
 Custom frame size and position that fits my laptop
 #+begin_src emacs-lisp :tangle yes
@@ -56,14 +64,14 @@ Settings related to fonts within Doom Emacs:
 - '*doom-variable-pitch-font*' -- Variable font which is useful in some Emacs plugins.
 - '*doom-big-font*' -- Used in /doom-big-font-mode/; Useful for presentations.
 - '*font-lock-comment-face*' -- For comments.
-  '*font-lock-keyword-face*' -- For keywords with special significance, 'for' and 'if' in C
+'*font-lock-keyword-face*' -- For keywords with special significance, 'for' and 'if' in C
 #+begin_src emacs-lisp :tangle yes
 (setq doom-font (font-spec :family "JetBrainsMono NFM Light" :size 16 :weigth 'semi-bold)
-    doom-variable-pitch-font (font-spec :family "JetBrainsMono NFM Light" :size 18)
-    doom-big-font (font-spec :family "JetBrainsMono NFM Light" :size 20))
+      doom-variable-pitch-font (font-spec :family "JetBrainsMono NFM Light" :size 18)
+      doom-big-font (font-spec :family "JetBrainsMono NFM Light" :size 20))
 (after! doom-themes
   (setq doom-themes-enable-bold t
-      doom-themes-enable-italic t))
+        doom-themes-enable-italic t))
 (custom-set-faces!
   '(font-lock-comment-face :weight bold)
   '(font-lock-keyword-face :weight bold))
@@ -92,14 +100,38 @@ Settings related to fonts within Doom Emacs:
 #+begin_src emacs-lisp :tangle yes
 (use-package! treemacs
   :config
-  (setq treemacs-position 'right))
+  (setq treemacs-position 'right
+        treemacs-missing-project-action 'remove))
 #+end_src
 
 ** Text formatting
 #+begin_src emacs-lisp :tangle yes
-(after! org
-  (setq-default fill-column 90)
-  (add-hook 'org-mode-hook #'auto-fill-mode))
+(setq-default fill-column 90)
+#+end_src
+
+** ELisp Editing
+#+begin_src emacs-lisp :tangle yes
+;; Linting
+(use-package! rainbow-delimiters
+  :hook (emacs-lisp-mode . rainbow-delimiters-mode))
+(add-hook 'emacs-lisp-mode-hook #'flycheck-mode)
+(setq flycheck-emacs-lisp-load-path 'inherit)
+
+;; Structural editing
+(add-hook 'emacs-lisp-mode-hook #'lispy-mode)
+
+;; QoL
+(add-hook 'emacs-lisp-mode-hook #'eldoc-mode)
+(add-hook 'emacs-lisp-mode-hook #'hl-line-mode)
+
+;; Better eval feedback
+(setq eval-expression-print-length nil
+      eval-expression-print-level nil)
+
+;; Parenthesis feedback
+(after! smartparens
+  (show-smartparens-global-mode 1)
+  (setq sp-show-pair-delay 0))
 #+end_src
 
 ** Pdf-tools
@@ -140,15 +172,39 @@ Settings related to fonts within Doom Emacs:
 Note that we call *(after! org)* to ensure it isn't evaluated too early.
 #+begin_src emacs-lisp :tangle yes
 (after! org
-  (setq org-directory "~/org/"
-        org-hide-emphasis-markers t)
-  (setq org-clock-sound "~/Music/orgclock.wav"))
+  (setq org-directory (expand-file-name "~/org/")
+        org-clock-sound (expand-file-name "~/Music/orgclock.wav"))
+  
+  (setq org-hide-emphasis-markers t
+        org-src-fontify-natively t
+        org-src-window-setup 'current-window)
+
+  (add-hook! 'org-mode-hook #'rainbow-delimiters-mode))
 #+end_src
 
 *** Org-agenda
 #+begin_src emacs-lisp :tangle yes
 (after! org
-  (setq org-agenda-files '("~/org/agenda.org")))
+  (setq org-agenda-files '("c:/Users/Job_man/org/agenda/"))
+  
+  (setq org-priority-faces '((?A :foreground "#ff6c6b" :weight bold)
+                             (?B :foreground "#fca503" :weight bold)
+                             (?C :foreground "#fcec03" :weight bold))
+        org-agenda-block-separator 8411)
+  
+  (setq org-agenda-custom-commands
+        '(("v" "A stylized agenda view"
+           ((tags "PRIORITY=\"A\""
+                  ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                   (org-agenda-overriding-header "High-priority tasks:")))
+            (tags "PRIORITY=\"B\""
+                  ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                   (org-agenda-overriding-header "Medium-priority tasks:")))
+            (tags "PRIORITY=\"C\""
+                  ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                   (org-agenda-overriding-header "Low-priority tasks:")))
+            (agenda "")
+            (alltodo ""))))))
 #+end_src
 
 *** Org-roam
@@ -191,10 +247,10 @@ Note that we call *(after! org)* to ensure it isn't evaluated too early.
 (setq ispell-local-dictionary-alist
       '(("en_US" "[[:alpha:]]" "[^[:alpha:]]" "[']" nil ("-d" "en_US") nil utf-8)))
 #+end_src
+
 ** Projectile
 #+begin_src emacs-lisp :tangle yes
-(use-package projectile
+(use-package! projectile
   :config
   (projectile-mode 1))
 #+end_src
-
