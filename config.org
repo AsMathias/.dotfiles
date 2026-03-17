@@ -106,7 +106,8 @@ Settings related to fonts within Doom Emacs:
 
 ** Text formatting
 #+begin_src emacs-lisp :tangle yes
-(setq-default fill-column 90)
+(after! org
+  (setq-default fill-column 90))
 #+end_src
 
 ** ELisp Editing
@@ -130,7 +131,7 @@ Settings related to fonts within Doom Emacs:
 
 ;; Parenthesis feedback
 (after! smartparens
-  (show-smartparens-global-mode 1)
+  (add-hook! 'emacs-lisp-mode-hook #'show-smartparens-mode)
   (setq sp-show-pair-delay 0))
 #+end_src
 
@@ -179,7 +180,7 @@ Note that we call *(after! org)* to ensure it isn't evaluated too early.
         org-src-fontify-natively t
         org-src-window-setup 'current-window)
 
-  (add-hook! 'org-mode-hook #'rainbow-delimiters-mode))
+  (add-hook! 'org-mode-hook #'auto-fill-mode))
 #+end_src
 
 *** Org-agenda

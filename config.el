@@ -68,7 +68,8 @@
   (setq treemacs-position 'right
         treemacs-missing-project-action 'remove))
 
-(setq-default fill-column 90)
+(after! org
+  (setq-default fill-column 90))
 
 ;; Linting
 (use-package! rainbow-delimiters
@@ -89,7 +90,7 @@
 
 ;; Parenthesis feedback
 (after! smartparens
-  (show-smartparens-global-mode 1)
+  (add-hook! 'emacs-lisp-mode-hook #'show-smartparens-mode)
   (setq sp-show-pair-delay 0))
 
 (use-package pdf-view
@@ -128,7 +129,7 @@
         org-src-fontify-natively t
         org-src-window-setup 'current-window)
 
-  (add-hook! 'org-mode-hook #'rainbow-delimiters-mode))
+  (add-hook! 'org-mode-hook #'auto-fill-mode))
 
 (after! org
   (setq org-agenda-files '("c:/Users/Job_man/org/agenda/"))
