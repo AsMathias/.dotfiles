@@ -31,11 +31,18 @@
      'face 'doom-dashboard-banner)))
 (setq +doom-dashboard-ascii-banner-fn #'my-weebery-is-always-greater)
 
-(add-to-list 'exec-path (expand-file-name "~/.emacs.d/bin/doom"))
+(add-to-list 'exec-path (expand-file-name "~/.emacs.d/bin"))
 (setq shell-file-name "C:/Program Files/PowerShell/7/pwsh.exe")
 (setq explicit-shell-file-name "C:/Program Files/PowerShell/7/pwsh.exe")
 
-(setq default-frame-alist '((top . 7) (left . 0) (height . 47) (width . 100)))
+(setq-default fill-column 80)
+(setq default-frame-alist
+      (append '((vertical-scroll-bars . nil))
+              (if (string= (system-name) "DESKTOP-PP099OG")
+                  ;; Desktop
+                  '((top . 5) (left . 0) (height . 47) (width . 189))
+                ;; Default/Laptop
+                '((top . 7) (left . 0) (height . 47) (width . 100)))))
 
 (setq doom-font (font-spec :family "JetBrainsMono NFM Light" :size 16 :weigth 'semi-bold)
       doom-variable-pitch-font (font-spec :family "JetBrainsMono NFM Light" :size 18)
@@ -68,9 +75,6 @@
   (setq treemacs-position 'right
         treemacs-missing-project-action 'remove))
 
-(after! org
-  (setq-default fill-column 90))
-
 ;; Linting
 (use-package! rainbow-delimiters
   :hook (emacs-lisp-mode . rainbow-delimiters-mode))
@@ -93,14 +97,14 @@
   (add-hook! 'emacs-lisp-mode-hook #'show-smartparens-mode)
   (setq sp-show-pair-delay 0))
 
-(use-package pdf-view
+(use-package! pdf-view
   :hook (pdf-tools-enabled . pdf-view-midnight-minor-mode)
   :hook (pdf-tools-enabled . hide-mode-line-mode)
   :config
   (setq pdf-view-midnight-colors '("#530000" . "#e2cdaf")))
 
-;;(setq reftex-default-bibliography "~/Documents/Latex/")
-(use-package lsp-ltex
+(setq reftex-default-bibliography "~/Documents/Latex/")
+(use-package! lsp-ltex
   :hook (LaTeX-mode . lsp)         ;; Enable LSP in AUCTeX's LaTeX-mode
   :custom
   (lsp-ltex-language "en-US"))
@@ -129,10 +133,19 @@
         org-src-fontify-natively t
         org-src-window-setup 'current-window)
 
-  (add-hook! 'org-mode-hook #'auto-fill-mode))
+  (add-hook! 'org-mode-hook #'auto-fill-mode)
+  (require 'org-habit)
+  
+  ;; Disable lsp and flycheck mode in org src blocks
+  (add-hook! 'org-src-mode-hook
+             (lambda ()
+               (lsp-mode -1)
+               (flycheck-mode -1))))
 
 (after! org
   (setq org-agenda-files '("c:/Users/Job_man/org/agenda/"))
+  (setq org-agenda-show-future-repeats nil)
+  (put 'org-agenda-files 'customized-value nil)
   
   (setq org-priority-faces '((?A :foreground "#ff6c6b" :weight bold)
                              (?B :foreground "#fca503" :weight bold)
@@ -141,15 +154,21 @@
   
   (setq org-agenda-custom-commands
         '(("v" "A stylized agenda view"
-           ((tags "PRIORITY=\"A\""
+           ((tags "PRIORITY=\"A\"-habit"
                   ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                   (org-agenda-overriding-header "High-priority tasks:")))
-            (tags "PRIORITY=\"B\""
+                   (org-agenda-overriding-header "High-priority tasks:")
+                   (org-agenda-files (remove "c:/Users/Job_man/org/agenda/todo.org"
+                                             (org-agenda-files)))))
+            (tags "PRIORITY=\"B\"-habit"
                   ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                   (org-agenda-overriding-header "Medium-priority tasks:")))
-            (tags "PRIORITY=\"C\""
+                   (org-agenda-overriding-header "Medium-priority tasks:")
+                   (org-agenda-files (remove "c:/Users/Job_man/org/agenda/todo.org"
+                                             (org-agenda-files)))))
+            (tags "PRIORITY=\"C\"-habit"
                   ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                   (org-agenda-overriding-header "Low-priority tasks:")))
+                   (org-agenda-overriding-header "Low-priority tasks:")
+                   (org-agenda-files (remove "c:/Users/Job_man/org/agenda/todo.org"
+                                             (org-agenda-files)))))
             (agenda "")
             (alltodo ""))))))
 
@@ -166,6 +185,10 @@
   (setq-default org-download-method 'directory
                 org-download-image-dir "~/Pictures/"
                 org-download-heading-lvl nil))
+
+(after! org
+  (setq org-default-notes-file "~/org/notes.org")
+  (setq +org-capture-todo-file "~/org/agenda/todo.org"))
 
 (map! "Ø" #'evil-multiedit-toggle-or-restrict-region)
 

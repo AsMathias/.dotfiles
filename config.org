@@ -1,8 +1,29 @@
 #+TITLE: Config
 #+AUTHOR: Matros Oskal
-#+OPTIONS: toc:3
 
 My Windows Doom Emacs config
+
+* Table of Contents :TOC_3:
+  - [[#me][Me]]
+  - [[#doom][Doom]]
+    - [[#doom-dashboard][Doom Dashboard]]
+  - [[#shell][Shell]]
+  - [[#frame-config][Frame config]]
+  - [[#fonts][Fonts]]
+  - [[#lsp][Lsp]]
+  - [[#treemacs][Treemacs]]
+  - [[#elisp-editing][ELisp Editing]]
+  - [[#pdf-tools][Pdf-tools]]
+  - [[#latex][Latex]]
+  - [[#org-mode][Org-mode]]
+    - [[#org-agenda][Org-agenda]]
+    - [[#org-roam][Org-roam]]
+    - [[#org-download][Org-download]]
+    - [[#org-capture][Org-capture]]
+  - [[#multiple-cursors][Multiple-cursors]]
+  - [[#language][Language]]
+  - [[#spell-flyspell-hunspell][Spell +flyspell +hunspell]]
+  - [[#projectile][Projectile]]
 
 ** Me
 #+begin_src emacs-lisp :tangle yes
@@ -47,15 +68,22 @@ Setting either custom splash image or custom ASCII art in the Doom Dashboard
 
 ** Shell
 #+begin_src emacs-lisp :tangle yes
-(add-to-list 'exec-path (expand-file-name "~/.emacs.d/bin/doom"))
+(add-to-list 'exec-path (expand-file-name "~/.emacs.d/bin"))
 (setq shell-file-name "C:/Program Files/PowerShell/7/pwsh.exe")
 (setq explicit-shell-file-name "C:/Program Files/PowerShell/7/pwsh.exe")
 #+end_src
 
 ** Frame config
-Custom frame size and position that fits my laptop
+Custom frame size and position that fits my desktop
 #+begin_src emacs-lisp :tangle yes
-(setq default-frame-alist '((top . 7) (left . 0) (height . 47) (width . 100)))
+(setq-default fill-column 80)
+(setq default-frame-alist
+      (append '((vertical-scroll-bars . nil))
+              (if (string= (system-name) "DESKTOP-PP099OG")
+                  ;; Desktop
+                  '((top . 5) (left . 0) (height . 47) (width . 189))
+                ;; Default/Laptop
+                '((top . 7) (left . 0) (height . 47) (width . 100)))))
 #+end_src
 
 ** Fonts
@@ -104,12 +132,6 @@ Settings related to fonts within Doom Emacs:
         treemacs-missing-project-action 'remove))
 #+end_src
 
-** Text formatting
-#+begin_src emacs-lisp :tangle yes
-(after! org
-  (setq-default fill-column 90))
-#+end_src
-
 ** ELisp Editing
 #+begin_src emacs-lisp :tangle yes
 ;; Linting
@@ -137,7 +159,7 @@ Settings related to fonts within Doom Emacs:
 
 ** Pdf-tools
 #+begin_src emacs-lisp :tangle yes
-(use-package pdf-view
+(use-package! pdf-view
   :hook (pdf-tools-enabled . pdf-view-midnight-minor-mode)
   :hook (pdf-tools-enabled . hide-mode-line-mode)
   :config
@@ -146,8 +168,8 @@ Settings related to fonts within Doom Emacs:
 
 ** Latex
 #+begin_src emacs-lisp :tangle yes
-;;(setq reftex-default-bibliography "~/Documents/Latex/")
-(use-package lsp-ltex
+(setq reftex-default-bibliography "~/Documents/Latex/")
+(use-package! lsp-ltex
   :hook (LaTeX-mode . lsp)         ;; Enable LSP in AUCTeX's LaTeX-mode
   :custom
   (lsp-ltex-language "en-US"))
@@ -180,13 +202,22 @@ Note that we call *(after! org)* to ensure it isn't evaluated too early.
         org-src-fontify-natively t
         org-src-window-setup 'current-window)
 
-  (add-hook! 'org-mode-hook #'auto-fill-mode))
+  (add-hook! 'org-mode-hook #'auto-fill-mode)
+  (require 'org-habit)
+  
+  ;; Disable lsp and flycheck mode in org src blocks
+  (add-hook! 'org-src-mode-hook
+             (lambda ()
+               (lsp-mode -1)
+               (flycheck-mode -1))))
 #+end_src
 
 *** Org-agenda
 #+begin_src emacs-lisp :tangle yes
 (after! org
   (setq org-agenda-files '("c:/Users/Job_man/org/agenda/"))
+  (setq org-agenda-show-future-repeats nil)
+  (put 'org-agenda-files 'customized-value nil)
   
   (setq org-priority-faces '((?A :foreground "#ff6c6b" :weight bold)
                              (?B :foreground "#fca503" :weight bold)
@@ -195,15 +226,21 @@ Note that we call *(after! org)* to ensure it isn't evaluated too early.
   
   (setq org-agenda-custom-commands
         '(("v" "A stylized agenda view"
-           ((tags "PRIORITY=\"A\""
+           ((tags "PRIORITY=\"A\"-habit"
                   ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                   (org-agenda-overriding-header "High-priority tasks:")))
-            (tags "PRIORITY=\"B\""
+                   (org-agenda-overriding-header "High-priority tasks:")
+                   (org-agenda-files (remove "c:/Users/Job_man/org/agenda/todo.org"
+                                             (org-agenda-files)))))
+            (tags "PRIORITY=\"B\"-habit"
                   ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                   (org-agenda-overriding-header "Medium-priority tasks:")))
-            (tags "PRIORITY=\"C\""
+                   (org-agenda-overriding-header "Medium-priority tasks:")
+                   (org-agenda-files (remove "c:/Users/Job_man/org/agenda/todo.org"
+                                             (org-agenda-files)))))
+            (tags "PRIORITY=\"C\"-habit"
                   ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                   (org-agenda-overriding-header "Low-priority tasks:")))
+                   (org-agenda-overriding-header "Low-priority tasks:")
+                   (org-agenda-files (remove "c:/Users/Job_man/org/agenda/todo.org"
+                                             (org-agenda-files)))))
             (agenda "")
             (alltodo ""))))))
 #+end_src
@@ -226,6 +263,13 @@ Note that we call *(after! org)* to ensure it isn't evaluated too early.
   (setq-default org-download-method 'directory
                 org-download-image-dir "~/Pictures/"
                 org-download-heading-lvl nil))
+#+end_src
+
+*** Org-capture
+#+begin_src emacs-lisp :tangle yes
+(after! org
+  (setq org-default-notes-file "~/org/notes.org")
+  (setq +org-capture-todo-file "~/org/agenda/todo.org"))
 #+end_src
 
 ** Multiple-cursors
