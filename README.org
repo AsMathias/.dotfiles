@@ -5,33 +5,36 @@
 Currently there's only my Doom Emacs config for Windows 11 ¯\_(ツ)_/¯
 
 ** Some Windows requirements
-For this config to work you're required to have multiple path variables in place. These
-include, but are not limited to:
+For this config to work you're required to have multiple path variables in
+place. These include, but are not limited to:
 - ~DOOMDIR~
 - ~DICPATH~
 - ~C:\Program Files\fd~
 - ~C:\Program Files\ripgrep~
 - ~C:\msys64\mingw64\bin~
 - ~C:\ProgramData\chocolatey\lib\hunspell.portable\tools~
-If you use package managers like =msys64= you can often get away with only adding a path to
-its bin like shown above, given of course you install the required programs with =msys64=
+If you use package managers like =msys64= you can often get away with only adding
+a path to its bin like shown above, given of course you install the required
+programs with =msys64=.
 
-To use =Hunspell= you need to have a dictionary directory with your desired dictionary files.
-In my case they're stored in a directory called "Dictionaries" placed in my root directory.
+To use =Hunspell= you need to have a dictionary directory with your desired
+dictionary files. In my case they're stored in a directory called "Dictionaries"
+placed in my root directory.
 
-If you've installed emacs with MSYS2, you should either clone and install Doom inside the
-~C:/Users/USER/AppData/Roaming/~ directory, or run *cmd* as admin and execute the following
-commands:
+If you've installed Emacs with MSYS2, you should either clone and install Doom
+inside the ~C:/Users/USER/AppData/Roaming/~ directory, or run *cmd* as admin and
+execute the following commands:
 - ~mklink /j "C:\Users\USER\AppData\Roaming\.emacs.d" "C:\Users\USER\.emacs.d"~
 - ~mklink /j "C:\Users\USER\AppData\Roaming\.doom.d" "C:\Users\USER\.doom.d"~
 - ~mklink /j "C:\Users\USER\AppData\Roaming\org" "C:\Users\USER\org"~
-I recommend the first option, much less work and headache if you're cognizant about it.
-Also remember to replace ~USER~ appropriately.
+I recommend the first option, much less work and headache if you're cognizant
+about it. Also remember to replace ~USER~ appropriately.
 
-You should also set HOME and APPDATA enviroment variables. You can check if they're set
-with:
+You should also set HOME and APPDATA enviroment variables. You can check if
+they're set with:
 - ~echo $env:HOME~
 - ~echo $env:APPDATA~
 These variables should be something like:
 - ~HOME = C:\Users\USER~
 - ~APPDATA = C:\Users\USER\AppData\Roaming~
+  
